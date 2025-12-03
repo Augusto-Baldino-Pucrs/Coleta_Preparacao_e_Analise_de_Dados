@@ -1,0 +1,1048 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,top=2.5cm,bottom=3.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage[table,xcdraw,dvipsnames]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{minted}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{etoolbox}
+
+\AtBeginEnvironment{minted}{\color{white}}
+
+\renewcommand{\contentsname}{Sumário}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\figurename}{Dashboard}
+
+\lstset{
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={á}{{\'a}}1 {ã}{{\~a}}1 {â}{{\^a}}1 {à}{{\`a}}1
+             {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1
+             {ô}{{\^o}}1 {õ}{{\~o}}1 {ú}{{\'u}}1 {ç}{{\c{c}}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1
+             {Ú}{{\'U}}1 {Ç}{{\c{C}}}1,
+}
+
+\lstdefinestyle{vscode}{
+    language=Python,
+    extendedchars=true,
+    inputencoding=ansinew,
+    tabsize=4,
+    showstringspaces=false,
+    numbers=left,
+    firstnumber=1,
+    commentstyle=\color{ForestGreen},        
+    keywordstyle=\color{blue},        
+    stringstyle=\color{orange},
+    rulecolor=\color{black},
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    numberstyle=\tiny,
+    aboveskip=1em,
+    belowskip=1em,
+}
+
+\pagestyle{fancy}
+\setlength{\footskip}{35pt}
+\fancyhf{}
+\fancyfoot[C]{%
+  {\scriptsize\color{gray}
+    Av. Ipiranga, 6681\thinspace|\thinspace Prédio 30\thinspace|\thinspace Bloco C\thinspace|\thinspace Sala 101\\
+    CEP 90619-900\thinspace|\thinspace Porto Alegre, RS\thinspace|\thinspace Brasil\\
+    Fone: (51) 3320-3558\thinspace|\thinspace E-mail: politecnica@pucrs.br\thinspace|\thinspace www.pucrs.br/politecnica%
+  }
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \thispagestyle{fancy}
+
+    \centering
+    {\LARGE\textbf{PROJETO EM CIÊNCIA DE DADOS}}\\[1cm]
+    
+    \textbf{SEMESTRE:} 2025/2\\[0.5cm]
+    \textbf{PROJETO:} \texttt{O custo das eleições}\\[0.5cm]
+    \textbf{COMPONENTES DO GRUPO:}\\
+    Augusto Peroni Baldino\\
+    Bruno Grigoletti Laitano\\
+    Daniel Chin Tay Lee\\
+    João Pedro Zarth Dias\\[1cm]
+
+    \begin{flushleft}
+    \textbf{Breve descrição do problema:} Este trabalho extensionista consiste em realizar processos de coleta, preparação e análise de dados a partir dos registros abertos da Câmara dos Deputados, com informações a respeito do trabalho de deputados federais. De forma específica, o texto analisa o impacto das últimas duas eleições gerais (2018 e 2022) sobre as atividades parlamentares, em especial sobre o valor líquido gasto por cada partido e representante, em comparação a estas mesmas atividades, quando realizadas em anos não eleitorais.\\[0.5cm]
+
+    \textbf{Breve descrição da solução proposta:} Realizamos o \textit{download} dos arquivos existentes no portal em formato \texttt{.json} referentes aos gastos parlamentares em um período de cinco anos \textemdash \ de 2018 a 2022. Esse período de tempo compreende as duas últimas eleições gerais e os anos de atuação da legislatura eleita no primeiro pleito. Dada a série temporal, analisamos a variância dos gastos realizados nos dois anos eleitorais (2018 e 2022) e nos anos não eleitorais (2019, 2020 e 2021), buscando compreender as razões da divergência de valores, em especial o impacto dos pleitos sobre as atividades de deputados federais. Como ano eleitoral, considera-se apenas as eleições gerais.\\[0.5cm]
+
+    \textbf{Fases da Metodologia CRISP-DM:}
+        \renewcommand{\arraystretch}{1.5}
+        \begin{longtable}{>{\raggedright\arraybackslash}p{0.25\linewidth} >{\raggedright\arraybackslash}p{0.6\linewidth} >{\centering\arraybackslash}p{0.1\linewidth}}
+            \toprule
+            \textbf{Fase} & \textbf{Tarefas} & \textbf{\%} \\
+            \midrule
+            \endfirsthead
+            
+            \toprule
+            \textbf{Fase} & \textbf{Tarefas} & \textbf{\% Concluído} \\
+            \midrule
+            \endhead
+            
+            Compreensão do Negócio & Entendimento dos objetivos e requisitos sob a perspectiva do negócio & 100\% \\
+            Compreensão dos Dados & Avaliação das fontes de dados disponíveis e determinação de coletas adicionais & 100\% \\
+            Preparação dos Dados & Limpeza dos dados e preparo do \textit{dataset} a ser utilizado na fase de modelagem & 100\% \\
+            \bottomrule
+        \end{longtable}
+
+    \textbf{Resumo do que foi concluído até o momento:} Na primeira fase do projeto, que compreende a Compreensão do Negócio, debatemos o escopo do projeto, baseando-nos nas informações disponíveis no portal. A definição da proposta se deu com o intuito de trabalhar com uma ampla gama de dados, além de trazer à pesquisa questões teóricas sobre o tema. Além disso, coletamos os arquivos relevantes disponíveis no portal que nos permitirão observar os gastos dos parlamentares no período selecionado. Na sequência, implementamos um algoritmo em Python para ler esses arquivos e organizar os dados mais relevantes em planilhas. Também criamos uma classe de acesso a API da Câmara dos Deputados para organizar localmente todas as informações desejadas sobre os deputados.
+    \newline \newline
+    Na fase de Compreensão dos Dados, implementamos estratégias de coleta de dados, construindo localmente planilhas baseadas em arquivos \texttt{.json} e em chamadas à API do portal de dados abertos da Câmara dos Deputados. Na sequência, utilizamos operações nativas da biblioteca \textit{Pandas} para descrever os dados coletados, além de construir uma análise exploratória inicial do tema central da nossa investigação. Nessa etapa do trabalho, também abordamos a qualidade dos dados, lançando mão de operações de limpeza e identificação de \textit{outliers}.
+    \newline \newline
+    Na fase de Preparação dos Dados, importamos as nossas planilhas para o \textit{PowerBI} e efetivamente realizamos os processos de limpeza mapeados na fase anterior. Na sequência, produzimos \textit{dashboards} para auxiliar na visualização dos principais dados selecionados, com o intuito de demonstrar graficamente os resultados da nossa investigação. Na contramão do que se acredita em meio ao senso comum, concluímos que os nossos representantes na Câmara dos Deputados não gastam mais durante períodos eleitorais.
+    \end{flushleft}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\newpage
+\section{Compreensão do Negócio}
+
+\subsection{Background}
+De forma geral, a pesquisa explora temas da política brasileira, em especial a atividade financeira dos nossos parlamentares em anos eleitorais e não eleitorais. Com isso em mente, coletando informações a respeito dos gastos de deputados federais entre os anos de 2018 e  2022, espera-se adquirir uma visão ampla sobre o quanto variam esses gastos. Nesse sentido, a mineração servirá para organizar localmente os dados disponibilizados pelo portal da Câmara dos Deputados \textemdash \ tanto a respeito das despesas quanto a respeito dos parlamentares.
+
+\subsection{Objetivos de negócio e critérios de sucesso (CS)}
+\begin{enumerate}
+    \item Analisar o impacto das eleições sobre os gastos parlamentares.
+    
+    \textit{CS}: Espera-se identificar se há variações significativas nos valores gastos por deputados federais nos últimos dois anos eleitorais em comparação a anos não eleitorais.  
+
+    \item Comparar o comportamento financeiro entre partidos políticos.
+    
+    \textit{CS}: Espera-se compreender se determinados partidos apresentam padrões distintos de despesa em períodos eleitorais e não eleitorais.  
+
+    \item Avaliar mudanças no perfil das despesas parlamentares.
+    
+    \textit{CS}: Espera-se verificar se há alteração na distribuição por categorias de despesa (ex.: transporte, consultoria, manutenção de escritório) em função da ocorrência das eleições.
+\end{enumerate}
+
+\subsection{Inventário de recursos}
+\begin{enumerate}
+    \item API Rest do portal de dados abertos da Câmara dos Deputados;
+    \item Arquivos \texttt{.json} disponibilizados no portal de dados abertos da Câmara dos Deputados;
+    \item Planilhas geradas a partir dos nossos \href{https://github.com/brunogrigoletti/custoeleitoral.git}{algoritmos de captura e leitura de dados};
+    \item Aplicação para visualizar dados e gerar \textit{dashboards}, como o \textit{PowerBI}.
+\end{enumerate}
+
+\subsection{Requisitos, suposições e restrições}
+Em relação à variância nas despesas realizadas por deputados federais, supomos que exista um aumento de gastos em anos eleitoriais, especificamente durante as eleições gerais, em que a população decide, entre outros cargos, a legislatura que comporá a Câmara dos Deputados nos quatro anos seguintes ao pleito.
+
+Inicialmente, esperava-se observar o fluxo de valores durante todo o período da Nova República, iniciada em 1985, com o término da ditadura civil-militar. No entanto, embora a API Rest do portal de dados abertos da Câmara dos Deputados disponibilize dados a respeito de todas as legislaturas da história da Casa, os arquivos \texttt{.json} compreendem apenas os gastos realizados a partir do ano de 2008.
+
+Além disso, há um empecilho técnico importante. Com base em alguns testes, revelou-se impraticável a coleta de dados referentes a todos os gastos disponíveis no portal. São muitas informações, e infelizmente não dispomos do poder computacional necessário para executar o nosso plano original. Nesse sentido, o período de tempo analisado compreenderá apenas as duas últimas eleições gerais, ocorridas em 2018 e em 2022, e os anos subsequentes da legislatura eleita no primeiro pleito \textemdash \ 2019, 2020, 2021 e 2022.
+
+\subsection{Terminologia}  
+A seguir, apresentamos os principais termos de domínio mencionados neste projeto:  
+
+\begin{itemize}
+    \item \textbf{Deputado federal}: Representante eleito para a Câmara dos Deputados, com mandato de quatro anos. Deputados federais são responsáveis por legislar e manter-se fiéis às leis e dogmas constitucionais nacionais. Podem propor, emendar, alterar e revogar leis, leis complementares ou emendas à Constituição Federal \cite{camara-deputado};
+    \item \textbf{Partido político}: Entidade formada pela livre associação de pessoas, com uma ideologia em comum, cujas finalidades são assegurar, no interesse do regime democrático, a autenticidade do sistema representativo e defender os direitos humanos fundamentais \cite{tre-partidos};
+    \item \textbf{Legislatura}: Período de quatro anos correspondente ao mandato dos deputados federais;
+    \item \textbf{Eleições gerais}: Processo eleitoral no qual são escolhidos deputados federais, estaduais, senadores, governadores e o presidente da República;
+    \item \textbf{Gastos parlamentares}: Recursos públicos disponibilizados aos deputados para custear despesas relacionadas ao exercício do mandato. A Cota para o Exercício da Atividade Parlamentar (CEAP) custeia as despesas do mandato, como passagens aéreas e conta de celular. Algumas são reembolsadas, como as com os Correios, e outras são pagas por débito automático, como a compra de passagens \cite{camara-gastos}.
+\end{itemize}
+
+\subsection{Objetivos de mineração e critérios de sucesso (CS)}
+\begin{enumerate}
+    \item Os dados coletados devem nos permitir observar despesas parlamentares a cada ano.
+    
+    \textit{CS}: Ao gerarmos os \textit{dashboards} para visualizar os dados, espera-se observar o fluxo das despesas de deputados federais durante anos específicos.
+
+   \item Os dados coletados devem nos permitir observar o conjunto de despesas de cada um dos partidos em anos específicos.
+    
+    \textit{CS}: Ao visualizar os dados, espera-se observar diferenças nos gastos de cada partido que compunha a Câmara dos Deputados nos anos selecionados.
+
+    \item Os dados coletados devem nos permitir observar o tipo de despesa realizada nos anos selecionados.
+    
+    \textit{CS}: Ao visualizar os dados, espera-se observar o tipo de gasto realizado.
+\end{enumerate}
+
+\subsection{Plano de Projeto}
+\begin{itemize}
+    \item \textbf{Etapa 1 \textemdash \ Definição do escopo da pesquisa}: nesta fase inicial, debatemos possibilidades de investigação com base nos dados disponibilizados pelo portal de dados abertos da Câmara dos Deputados, visando a definição do tema central do trabalho;
+    \item \textbf{Etapa 2 \textemdash \ Coleta de dados}: na sequência, iniciaremos o desenvolvimento dos algoritmos de captura dos dados a serem utilizados na pesquisa. Nesse sentido, utilizaremos a API da Câmara para coletar os principais dados a respeito dos deputados federais que tenham composto a legislatura iniciada a partir das eleições gerais de 2018. Além disso, realizamos o \textit{download} de todos os arquivos \texttt{.json} relevantes disponíveis no portal, os quais contêm informações detalhadas sobre gastos parlamentares;
+    \item \textbf{Etapa 3 \textemdash \ Análise dos dados}: os algoritmos desenvolvidos durante a segunda etapa da investigação devem produzir planilhas organizadas, que servirão de base para a análise dos dados e para a produção de \textit{dashboards} para visualização dos dados. 
+\end{itemize}
+
+\subsection{Avaliação inicial de técnicas e ferramentas}
+Neste projeto, utilizaremos um conjunto de ferramentas e técnicas de ciência de dados para apoiar as diferentes fases do CRISP-DM:  
+
+\begin{itemize}
+    \item \textbf{Linguagem de programação}: Python, por sua ampla gama de bibliotecas voltadas para coleta, análise e visualização de dados;  
+    \item \textbf{Bibliotecas e aplicações de manipulação e análise de dados}: 
+    \texttt{pandas} (para organização e limpeza de dados), \texttt{openpyxl} (para geração de planilhas) e \texttt{PowerBI} (para visualização dos dados e geração de \textit{dashboards});    
+    \item \textbf{Técnicas estatísticas}: análise comparativa entre anos eleitorais e não eleitorais, 
+    além da utilização de séries temporais para observar tendências ao longo do período estudado;
+    \item \textbf{Metodologia}: aplicação do CRISP-DM como guia para as fases do projeto, desde a compreensão do negócio até a análise e interpretação dos resultados.  
+\end{itemize}
+
+\subsection{Status do escopo}
+Acreditamos que será possível cumprir 100\% do escopo pretendido. Entretanto, obstáculos serão encontrados ao longo da elaboração desta pesquisa, uma vez que trabalharemos com um conjunto bastante expressivo de dados. Além disso, devido ao tempo disponível para desenvolver o trabalho, é possível que não possamos fundamentá-lo de forma ideal em termos de referenciais bibliográficos.
+
+\newpage
+\section{Compreensão dos Dados}
+
+\subsection{Coleta dos dados}
+Tendo em vista o principal objetivo da nossa pesquisa \textemdash \ entender se há mudanças relevantes no comportamento fiscal de deputados federais em anos de eleições gerais \textemdash \ definimos dois escopos de coleta distintos.
+
+O primeiro deles utiliza os documentos \texttt{.json} disponíveis no portal de dados abertos da Câmara dos Deputados a fim de coletar informações sobre gastos parlamentares realizados entre os anos de 2018 e 2022. O período compreende todos os anos da legislatura eleita no penúltimo pleito, incluindo dois anos eleitorais.
+
+No código abaixo, percorremos todos os arquivos \texttt{.json} transferidos do portal para um diretório local. Nomeamos os arquivos a partir do ano a que correspondem, facilitando não só a leitura, mas também a interpretação dos dados brutos. Capturamos as informações que julgamos mais relevantes para a nossa proposta, resgitrando-as em um dicionário local de nome \texttt{gastos}.
+
+\begin{lstlisting}[style=vscode]
+gastos = []
+
+def ler_arquivo(ano):
+    with open(f'arquivos/{ano}.json', encoding='utf-8') as f:
+        data = json.load(f)
+        processar_dados(data)
+
+def processar_dados(data):
+    for i in data['dados']:
+        id = i.get('idDeputado')
+        if id is None:
+            continue
+
+        nome = i['nomeParlamentar'].title()
+
+        descricao = i.get('descricao', 'N/A').title()
+
+        fornecedor = i.get('fornecedor', 'N/A').title()
+
+        data_raw = i.get('dataEmissao', 'N/A')
+        if data_raw != 'N/A':
+            try:
+                data_hora = datetime.strptime(data_raw, "%Y-%m-%dT%H:%M:%S").strftime("%d/%m/%Y %H:%M")
+            except ValueError:
+                data_hora = data_raw
+        else:
+            data_hora = 'N/A'
+
+        valor_raw = i.get('valorLiquido', 0)
+        try:
+            valor = float(valor_raw)
+        except (TypeError, ValueError):
+            continue
+
+        gastos.append({
+            "id": id,
+            "nome": nome,
+            "descricao": descricao,
+            "fornecedor": fornecedor,
+            "data": data_hora,
+            "valor": valor
+        })
+
+def get_gastos():
+    for ano in range(2018, 2023):
+        ler_arquivo(ano)
+
+    return gastos
+
+def gerar_planilha():
+    gastos = get_gastos()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Gastos"
+    ws.append(["ID", "Nome", "Descrição", "Fornecedor", "Data", "Valor (R$)"])
+
+    for gasto in gastos:
+        ws.append([
+            gasto["id"],
+            gasto["nome"],
+            gasto["descricao"],
+            gasto["fornecedor"],
+            gasto["data"],
+            gasto["valor"]
+        ])
+
+    wb.save("planilhas/gastos.xlsx")
+\end{lstlisting}
+
+A segunda coleta foi realizada com base na API RESTful do portal. São diversos os \textit{endpoints} disponíveis, mas utilizamos um em especial \textemdash \ \texttt{/deputados}. Tendo em vista que a API retorna um conjunto muito mais abrangente em termos de tempo em comparação aos arquivos utilizados na primeira coleta, definimos alguns parâmetros na URL para capturar apenas os dados desejados.
+
+No código abaixo, percorremos todas as páginas disponíveis a partir de uma dada URL, registrando os dados encontrados e coletados em um dicionário local de nome \texttt{deputados}:
+
+\begin{lstlisting}[style=vscode]
+# URL da API para obter os deputados da 56a legislatura
+url = "https://dadosabertos.camara.leg.br/api/v2/deputados?idLegislatura=56&ordem=ASC&ordenarPor=nome"
+
+def obter_deputados(url):
+    deputados = {}
+    while url:
+        response = requests.get(url)
+        if response.status_code != 200:
+            print("Erro ao acessar a API:", response.status_code)
+            break
+
+        data = response.json()
+        for deputado in data['dados']:
+            deputados[deputado['id']] = {
+                'id': deputado['id'],
+                # Normalizar nome do deputado
+                'nome': deputado['nome'].title(),
+                'partido': deputado['siglaPartido'],
+                'estado': deputado['siglaUf'],
+                'legislatura': deputado['idLegislatura']
+            }
+
+        url = proxima_pagina(data)
+    return deputados
+
+def proxima_pagina(data):
+    # Verifica se há um link para a próxima página
+    for link in data.get('links', []):
+        if link.get('rel') == 'next':
+            return link.get('href')
+    return None
+
+def gerar_planilha():
+    deputados = obter_deputados(url)
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Deputados"
+    ws.append(["ID", "Nome", "Partido", "Estado", "Legislatura"])
+
+    for id, info in deputados.items():
+        ws.append([
+            info["id"],
+            info["nome"],
+            info["partido"],
+            info["estado"],
+            info["legislatura"]
+        ])
+
+    wb.save("planilhas/deputados.xlsx")
+\end{lstlisting}
+
+Coletados os dados a respeito dos deputados e as informações relacionadas aos gastos de deputados federais nos anos mencionados, guardamos cada conjunto de dados em planilhas \textemdash \ \texttt{deputados.xlsx} e \texttt{gastos.xlsx}. Em ambos os casos, esse processo foi gerenciado por uma biblioteca do Python destinada a ler e a escrever arquivos Excel, chamada \texttt{openpyxl}. Na próxima seção deste trabalho, serão especificadas em detalhes as informações presentes em cada um dos conjuntos de dados criados a partir das nossas coletas.
+
+\subsection{Descrição dos dados}
+As colunas de cada uma das planilhas indicam exatamente os dados e os tipos de dados que decidimos preservar sobre cada deputado e cada gasto. Essa decisão baseou-se em uma análise prévia à coleta das informações disponíveis tanto na API quanto nos arquivos \texttt{.json} disponíveis no portal.
+
+A fim de visualizar mais detalhadamente a descrição dos dados incluídos em cada planilha, utilizamos a biblioteca \textit{Pandas}. Transformamos cada planilha em um \textit{DataFrame} e recorremos às operações disponíveis nessa biblioteca para entender de forma objetiva a natureza das informações com as quais estamos lidando. Abaixo, os códigos criados para visualizar as descrições, seguidos pelos resultados impressos no terminal:
+
+\begin{lstlisting}[style=vscode]
+    import pandas as pd
+    from tabulate import tabulate
+    
+    deputados = pd.read_excel("planilhas/deputados.xlsx")
+    gastos = pd.read_excel("planilhas/gastos.xlsx")
+    
+    deputados_info = pd.DataFrame({
+        "Coluna": deputados.columns,
+        "Tipo de dado": [str(deputados[col].dtype) for col in deputados.columns],
+        "Exemplo": [deputados[col].dropna().iloc[0] if deputados[col].notna().any() else "" for col in deputados.columns]
+    })
+    
+    gastos_info = pd.DataFrame({
+        "Coluna": gastos.columns,
+        "Tipo de dado": [str(gastos[col].dtype) for col in gastos.columns],
+        "Exemplo": [gastos[col].dropna().iloc[0] if gastos[col].notna().any() else "" for col in gastos.columns]
+    })
+    
+    print("Informações sobre o DataFrame 'deputados':")
+    print(tabulate(deputados_info, headers='keys', tablefmt='grid'))
+    
+    print("\nInformações sobre o DataFrame 'gastos':")
+    print(tabulate(gastos_info, headers='keys', tablefmt='grid'))
+\end{lstlisting}
+
+No caso da planilha \texttt{deputados.xlsx}, os seguintes dados são listados:
+
+\begin{table}[h!] 
+\centering 
+\rowcolors{2}{gray!10}{white} 
+\begin{tabular}{c l l l} 
+\toprule 
+\textbf{\#} & \textbf{Coluna} & \textbf{Tipo de dado} & \textbf{Exemplo} \\ 
+\midrule 
+0 & ID & int64 & 74784 \\ 
+1 & Nome & object & Luiza Erundina \\ 
+2 & Partido & object & SP \\ 
+3 & Estado & object & PSOL \\ 
+4 & Legislatura & int64 & 56 \\ 
+\bottomrule 
+\end{tabular} 
+\caption{Informações sobre o \textit{DataFrame} \texttt{deputados}} 
+\end{table}
+
+No caso da planilha \texttt{gastos.xlsx}, listamos as seguintes informações:
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{c p{3cm} p{3cm} p{6cm}}
+\toprule
+\textbf{\#} & \textbf{Coluna} & \textbf{Tipo de dado} & \textbf{Exemplo} \\
+\midrule
+0 & ID & int64 & 62881 \\
+1 & Nome & object & Danilo Forte \\
+2 & Descrição & object & Manutenção de Escritório de Apoio à Atividade Parlamentar \\
+3 & Fornecedor & object & Companhia Energética do Ceará \\
+4 & Data & object & 16/03/2022 00:00 \\
+5 & Valor (R\$) & float64 & 1439.49 \\
+\bottomrule
+\end{tabular}
+\caption{Informações sobre o \textit{DataFrame} \texttt{gastos}}
+\end{table}
+
+O tipo \texttt{int64} representa números inteiros de 64 bits, usado para identificadores ou valores numéricos sem casas decimais. O tipo \texttt{float64} armazena números reais (com casas decimais), sendo comum em colunas de valores monetários. Já o tipo \texttt{object} é utilizado para dados de texto ou mistos, como nomes, partidos e descrições.
+
+\subsection{Análise exploratória dos dados}
+Do ponto de vista da exploração inicial dos dados, executamos uma série de operações nativas da biblioteca \textit{Pandas} sobre as nossas planilhas, visando listar os principais parâmetros estatísticos existentes em meio aos nossos \textit{datasets}. Também utilizamos funções para nos indicar as dimensões de cada arquivo e informações gerais, como a quantidade de valores e os tipos de dados, já analisados no capítulo anterior.
+
+\begin{lstlisting}[style=vscode]
+    def geral(deputados, gastos):
+        # Primeiras e últimas linhas
+        print("Primeiras linhas do DataFrame 'deputados':")
+        print(deputados.head())
+        print("\nÚltimas linhas do DataFrame 'deputados':")
+        print(deputados.tail())
+    
+        print("\nPrimeiras linhas do DataFrame 'gastos':")
+        print(gastos.head())
+        print("\nÚltimas linhas do DataFrame 'gastos':")
+        print(gastos.tail())
+    
+        # Dimensões
+        print("\nDimensões do DataFrame 'deputados':", deputados.shape)
+        print("Dimensões do DataFrame 'gastos':", gastos.shape)
+    
+        # Nomes
+        print("Nomes das colunas do DataFrame 'deputados':", deputados.columns.tolist())
+        print("Nomes das colunas do DataFrame 'gastos':", gastos.columns.tolist())
+    
+        # Informções gerais
+        print("\nInformações gerais do DataFrame 'deputados':")
+        deputados.info()
+    
+        print("\nInformações gerais do DataFrame 'gastos':")
+        gastos.info()
+\end{lstlisting}
+
+Ao executar as operações do \textit{Pandas} aninhadas na nossa função \texttt{geral} obtivemos os seguintes resultados:
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{c c l c c c}
+\toprule
+\textbf{\#} & \textbf{ID} & \textbf{Nome} & \textbf{Partido} & \textbf{Estado} & \textbf{Legislatura} \\
+\midrule
+0 & 204554 & Abílio Santana & PSC & BA & 56 \\
+1 & 204521 & Abou Anni & UNIÃO & SP & 56 \\
+2 & 204379 & Acácio Favacho & MDB & AP & 56 \\
+3 & 204560 & Adolfo Viana & PSDB & BA & 56 \\
+4 & 204528 & Adriana Ventura & NOVO & SP & 56 \\
+\bottomrule
+\end{tabular}
+\caption{Primeiras linhas do \textit{DataFrame} \texttt{deputados}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{c c l c c c}
+\toprule
+\textbf{\#} & \textbf{ID} & \textbf{Nome} & \textbf{Partido} & \textbf{Estado} & \textbf{Legislatura} \\
+\midrule
+608 & 204559 & Zé Neto & PT & BA & 56 \\
+609 & 160632 & Zé Silva & SOLIDARIEDADE & MG & 56 \\
+610 & 204517 & Zé Vitor & PL & MG & 56 \\
+611 & 178923 & Zeca Cavalcanti & PTB & PE & 56 \\
+612 & 160592 & Zeca Dirceu & PT & PR & 56 \\
+\bottomrule
+\end{tabular}
+\caption{Últimas linhas do \textit{DataFrame} \texttt{deputados}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{3pt}
+\resizebox{\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{c c l l l l r}
+\toprule
+\textbf{\#} & \textbf{ID} & \textbf{Nome} & \textbf{Descrição} & \textbf{Fornecedor} & \textbf{Data} & \textbf{Valor (R\$)} \\
+\midrule
+0 & 4930 & Silvio Costa & Manutenção De Escritório De Apoio À Atividade Parlamentar & Antonio Carlos Brito Maciel & 06/01/2018 00:00 & 2160.00 \\
+1 & 4930 & Silvio Costa & Manutenção De Escritório De Apoio À Atividade Parlamentar & Antonio Carlos Brito Maciel & 07/03/2018 00:00 & 2160.00 \\
+2 & 4930 & Silvio Costa & Manutenção De Escritório De Apoio À Atividade Parlamentar & Antonio Carlos Brito Maciel & 01/04/2018 00:00 & 2160.00 \\
+3 & 4930 & Silvio Costa & Manutenção De Escritório De Apoio À Atividade Parlamentar & Antonio Carlos Brito Maciel & 12/06/2018 00:00 & 2160.00 \\
+4 & 4930 & Silvio Costa & Manutenção De Escritório De Apoio À Atividade Parlamentar & Antonio Carlos Brito Maciel & 10/07/2018 00:00 & 2160.00 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Primeiras linhas do \textit{DataFrame} \texttt{gastos}}
+\label{tab:gastos-primeiras}
+\end{table}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{3pt}
+\resizebox{\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{c c l l l l r}
+\toprule
+\textbf{\#} & \textbf{ID} & \textbf{Nome} & \textbf{Descrição} & \textbf{Fornecedor} & \textbf{Data} & \textbf{Valor (R\$)} \\
+\midrule
+807846 & 220008 & Eliza Virgínia & Passagem Aérea - Sigepa & Tam & 04/10/2022 12:00 & 1820.45 \\
+807847 & 220008 & Eliza Virgínia & Passagem Aérea - Sigepa & Tam & 16/10/2022 12:00 & 1827.79 \\
+807848 & 220008 & Eliza Virgínia & Passagem Aérea - Sigepa & Tam & 19/10/2022 12:00 & 1376.56 \\
+807849 & 220008 & Eliza Virgínia & Passagem Aérea - Sigepa & Tam & 04/11/2022 12:00 & 1820.45 \\
+807850 & 220008 & Eliza Virgínia & Passagem Aérea - Sigepa & Tam & 09/11/2022 12:00 & 1818.56 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Últimas linhas do \textit{DataFrame} \texttt{gastos}}
+\label{tab:gastos-ultimas}
+\end{table}
+
+\begin{minted}[bgcolor=black, fontsize=\footnotesize, breaklines]{text}
+Dimensões do DataFrame 'deputados': (613, 5)
+
+Dimensões do DataFrame 'gastos': (807851, 6)
+
+Nomes das colunas do DataFrame 'deputados': ['ID', 'Nome', 'Partido', 'Estado', 'Legislatura']
+
+Nomes das colunas do DataFrame 'gastos': ['ID', 'Nome', 'Descrição', 'Fornecedor', 'Data', 'Valor (R$)']
+
+Informações gerais do DataFrame 'deputados':
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 613 entries, 0 to 612
+Data columns (total 5 columns):
+ #   Column       Non-Null Count  Dtype
+---  ------       --------------  -----
+ 0   ID           613 non-null    int64
+ 1   Nome         613 non-null    object
+ 2   Partido      613 non-null    object
+ 3   Estado       613 non-null    object
+ 4   Legislatura  613 non-null    int64
+dtypes: int64(2), object(3)
+memory usage: 24.1+ KB
+
+Informações gerais do DataFrame 'gastos':
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 807851 entries, 0 to 807850
+Data columns (total 6 columns):
+ #   Column      Non-Null Count   Dtype
+---  ------      --------------   -----
+ 0   ID          807851 non-null  int64
+ 1   Nome        807851 non-null  object
+ 2   Descrição   807851 non-null  object
+ 3   Fornecedor  807818 non-null  object
+ 4   Data        801736 non-null  object
+ 5   Valor (R$)  807851 non-null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 37.0+ MB
+\end{minted}
+
+Com base nos resultados acima, podemos ver que ambos os nossos \textit{datasets} são bastante robustos em termos de quantidade de dados, principalmente o \textit{DataFrame} \texttt{gastos}. Este possui mais de 800 mil registros, com alguns valores nulos em comparação ao total de informações disponíveis, principalmente no que se refere ao atributo \texttt{Data}.
+
+Já o \textit{DataFrame} \texttt{deputados} é composto de 613 registros. No entanto, sabe-se que, em 2018, foram eleitos 513 deputados para a 56ª legislatura (2019-2023) da Câmara dos Deputados. Nesse sentido, vale dizer que a API retorna todos os deputados que exerceram mandato em qualquer período durante a legislatura em questão. Cada item retornado representa uma pessoa eleita, uma pessoa que assumiu como suplente, ou uma pessoa que teve exercício parcial (por afastamento, licença, substituição etc.).
+
+Do ponto de vista dos dados estatísticos, utilizamos as seguintes funções do \textit{Pandas}, aninhadas em nosso método \texttt{estatisticas}:
+
+\begin{lstlisting}[style=vscode]
+def estatisticas(deputados, gastos):
+    # Estatísticas descritivas
+    print("\nEstatísticas descritivas do DataFrame 'deputados':")
+    print(deputados.describe())
+
+    print("\nEstatísticas descritivas do DataFrame 'gastos':")
+    print(gastos.describe())
+
+    # Estatísticas gerais
+    print("\nEstatísticas gerais do DataFrame 'deputados':")
+    print(deputados.describe(include='all'))
+
+    print("\nEstatísticas gerais do DataFrame 'gastos':")
+    print(gastos.describe(include='all'))
+
+    # Contagem de valores únicos por coluna
+    print("\nContagem de valores únicos por coluna no DataFrame 'deputados':")
+    print(deputados.nunique())
+
+    print("\nContagem de valores únicos por coluna no DataFrame 'gastos':")
+    print(gastos.nunique())
+
+    # Contagem de valores por coluna
+    print("\nContagem de valores por coluna no DataFrame 'deputados':")
+    for col in deputados.columns:
+        print(f"\nColuna: {col}")
+        print(deputados[col].value_counts().head())
+
+    print("\nContagem de valores por coluna no DataFrame 'gastos':")
+    for col in gastos.columns:
+        print(f"\nColuna: {col}")
+        print(gastos[col].value_counts().head())
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{6pt}
+\resizebox{0.5\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{l r r}
+\toprule
+\textbf{Medida} & \textbf{ID} & \textbf{Legislatura} \\
+\midrule
+count & 613.000000 & 613.000000 \\
+mean  & 168367.101142 & 56.000000 \\
+std   & 46439.986835 & 0.000000 \\
+min   & 62881.000000 & 56.000000 \\
+25\%  & 141552.000000 & 56.000000 \\
+50\%  & 178963.000000 & 56.000000 \\
+75\%  & 204473.000000 & 56.000000 \\
+max   & 221183.000000 & 56.000000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Estatísticas descritivas do \textit{DataFrame} \texttt{deputados}}
+\label{tab:estat-descritivas-deputados}
+\end{table}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{6pt}
+\resizebox{0.5\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{l r r}
+\toprule
+\textbf{Medida} & \textbf{ID} & \textbf{Valor (R\$)} \\
+\midrule
+count & 807851.000000 & 807851.000000 \\
+mean  & 162162.867758 & 1032.277138 \\
+std   & 46216.308322 & 2975.694118 \\
+min   & 4930.000000 & -5500.290000 \\
+25\%  & 141464.000000 & 73.000000 \\
+50\%  & 178881.000000 & 199.870000 \\
+75\%  & 204415.000000 & 599.000000 \\
+max   & 220008.000000 & 168000.000000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Estatísticas descritivas do \textit{DataFrame} \texttt{gastos}}
+\label{tab:estat-descritivas-gastos}
+\end{table}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{3pt}
+\resizebox{0.65\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{l r l l l r}
+\toprule
+\textbf{Medida} & \textbf{ID} & \textbf{Nome} & \textbf{Partido} & \textbf{Estado} & \textbf{Legislatura} \\
+\midrule
+count & 613.000000 & 613 & 613 & 613 & 613.000000 \\
+unique & --- & 613 & 23 & 27 & --- \\
+top & --- & Abílio Santana & PL & SP & --- \\
+freq & --- & 1 & 85 & 81 & --- \\
+mean & 168367.101142 & --- & --- & --- & 56.000000 \\
+std & 46439.986835 & --- & --- & --- & 0.000000 \\
+min & 62881.000000 & --- & --- & --- & 56.000000 \\
+25\% & 141552.000000 & --- & --- & --- & 56.000000 \\
+50\% & 178963.000000 & --- & --- & --- & 56.000000 \\
+75\% & 204473.000000 & --- & --- & --- & 56.000000 \\
+max & 221183.000000 & --- & --- & --- & 56.000000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Estatísticas gerais do \textit{DataFrame} \texttt{deputados}}
+\label{tab:estat-gerais-deputados}
+\end{table}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{2pt}
+\resizebox{0.85\linewidth}{!}{
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{l r l l l l r}
+\toprule
+\textbf{Medida} & \textbf{ID} & \textbf{Nome} & \textbf{Descrição} & \textbf{Fornecedor} & \textbf{Data} & \textbf{Valor (R\$)} \\
+\midrule
+count & 807851.000000 & 807851 & 807851 & 807818 & 801736 & 807851.000000 \\
+unique & --- & 879 & 20 & 63368 & 7280 & --- \\
+top & --- & Diego Garcia & Combustíveis E Lubrificantes. & Tam & 01/03/2018 00:00 & --- \\
+freq & --- & 5493 & 273193 & 25961 & 1186 & --- \\
+mean & 162162.867758 & --- & --- & --- & --- & 1032.277138 \\
+std & 46216.308322 & --- & --- & --- & --- & 2975.694118 \\
+min & 4930.000000 & --- & --- & --- & --- & -5500.290000 \\
+25\% & 141464.000000 & --- & --- & --- & --- & 73.000000 \\
+50\% & 178881.000000 & --- & --- & --- & --- & 199.870000 \\
+75\% & 204415.000000 & --- & --- & --- & --- & 599.000000 \\
+max & 220008.000000 & --- & --- & --- & --- & 168000.000000 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Estatísticas gerais do \textit{DataFrame} \texttt{gastos}}
+\label{tab:estat-gerais-gastos}
+\end{table}
+
+\begin{minted}[bgcolor=black, fontsize=\footnotesize, breaklines]{text}
+Contagem de valores únicos por coluna no DataFrame 'deputados':
+ID             613
+Nome           613
+Partido         23
+Estado          27
+Legislatura      1
+dtype: int64
+
+Contagem de valores únicos por coluna no DataFrame 'gastos':
+ID               880
+Nome             879
+Descrição         20
+Fornecedor     63368
+Data            7280
+Valor (R$)    106581
+dtype: int64
+
+Contagem de valores por coluna no DataFrame 'deputados':
+
+Coluna: ID
+ID
+204554    1
+204521    1
+204379    1
+204560    1
+204528    1
+Name: count, dtype: int64
+
+Coluna: Nome
+Nome
+Abílio Santana     1
+Abou Anni          1
+Acácio Favacho     1
+Adolfo Viana       1
+Adriana Ventura    1
+Name: count, dtype: int64
+
+Coluna: Partido
+Partido
+PL       85
+PP       66
+PT       63
+UNIÃO    63
+PSD      58
+Name: count, dtype: int64
+
+Coluna: Estado
+Estado
+SP    81
+RJ    58
+MG    57
+BA    44
+RS    37
+Name: count, dtype: int64
+
+Coluna: Legislatura
+Legislatura
+56    613
+Name: count, dtype: int64
+
+Contagem de valores por coluna no DataFrame 'gastos':
+
+Coluna: ID
+ID
+178929    5493
+178857    5360
+160599    4833
+177282    4600
+74398     4560
+Name: count, dtype: int64
+
+Coluna: Nome
+Nome
+Diego Garcia          5493
+Jorge Solla           5360
+Dimas Fabiano         4833
+Subtenente Gonzaga    4600
+Maria Do Rosário      4560
+Name: count, dtype: int64
+
+Coluna: Descrição
+Descrição
+Combustíveis E Lubrificantes.                                273193
+Serviço De Táxi, Pedágio E Estacionamento                    108119
+Manutenção De Escritório De Apoio À Atividade Parlamentar    104924
+Telefonia                                                     56661
+Divulgação Da Atividade Parlamentar.                          56480
+Name: count, dtype: int64
+
+Coluna: Fornecedor
+Fornecedor
+Tam                                                 25961
+Uber Do Brasil Tecnologia Ltda.                     23153
+Cascol Combustiveis Para Veiculos Ltda              16164
+Gol                                                 13047
+Servico Nacional De Aprendizagem Comercial Senac     8084
+Name: count, dtype: int64
+
+Coluna: Data
+Data
+01/03/2018 00:00    1186
+01/10/2019 00:00    1114
+02/04/2018 00:00    1103
+01/06/2022 00:00    1091
+02/05/2018 00:00    1078
+Name: count, dtype: int64
+
+Coluna: Valor (R$)
+Valor (R$)
+100.0     31117
+200.0     14964
+150.0     13723
+50.0      12428
+1000.0     5004
+Name: count, dtype: int64
+\end{minted}
+
+É claro que há alguns desses resultados que nos dizem pouco, como é o caso das estatísticas descritivas de um \textit{DataFrame} como o \texttt{deputados}. Não há qualquer sentido, por exemplo, em calcular uma média de valores listados na coluna \texttt{ID}. No entanto, optamos por incluir em meio aos resultados todas as operações do \textit{Pandas} utilizadas, para ambos os \textit{datasets}. Assim, podemos demonstrar não só a robustez da biblioteca, mas também o quanto seu uso foi amplamente empregado ao longo deste trabalho.
+
+Finalmente, no que tange a conclusões em relação aos objetivos de mineração, construímos algumas visualizações que devem nos auxiliar futuramente em nossa análise principal \textemdash \ houve uma mudança de comportamento nos gastos durante a última eleição geral?
+
+A fim de mapear as possibilidades de resolução do nosso problema de pesquisa, utilizamos o \textit{DataFrame} \texttt{gastos} para gerar um \textit{scatter plot} baseado na distribuição dos gastos parlamentares por ano. O método desenvolvido para gerar o gráfico, bem como o gráfico propriamente dito, podem ser vistos abaixo:
+
+\begin{lstlisting}[style=vscode]    
+def scatterplot_gastos(df_gastos):
+    # Converter a coluna 'Data' para datetime
+    df_gastos['Data'] = pd.to_datetime(df_gastos['Data'], format="%d/%m/%Y %H:%M", errors='coerce')
+
+    # Calcular a correlação entre 'Valor (R$)' e 'Data'
+    correlacao_gastos_ano = df_gastos['Valor (R$)'].corr(df_gastos['Data'].astype('int64'))
+    print(f"Correlação entre 'Valor' e 'Data': {correlacao_gastos_ano}")
+
+    # Scatter plot dos gastos ao longo do tempo
+    sns.scatterplot(data=df_gastos, x="Data", y="Valor (R$)")
+    plt.gca().xaxis.set_major_locator(mdates.YearLocator())
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+    plt.gcf().autofmt_xdate() 
+    plt.title("Distribuição dos gastos por ano")
+    plt.show()
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=1\textwidth]{images/gastos_ano.png}
+    \label{fig:gastos_ano}
+\end{figure}
+
+O resultado preliminar já sugere uma série de questões a serem abordadas tanto no próximo subcapítulo, \textit{Verificação de qualidade dos dados}, quanto na próxima parte deste trabalho. Podemos ver que há \textit{outliers} evidentes no nosso conjunto de dados, bem como uma quantidade de gastos bastante relevante para cada ano analisado, dificultando um tanto a visualização do gráfico.
+
+Além disso, parece haver alguns registros em meio ao \textit{DataFrame} \texttt{gastos} com datas inválidas \textemdash \ isto é, anteriores ao ano de 2018 e posteriores ao ano de 2022, pontos de início e de fim do nosso recorte temporal. No próximo subcapítulo, ao tratarmos da limpeza de dados, esses registros serão removidos do nosso \textit{DataFrame}, e uma nova visualização será gerada e apresentada.
+
+Apesar dessas dificuldades, podemos ver que de fato há uma concentração de gastos em anos específicos. Esse fenômeno será analisado em maior nível de detalhes no próximo capítulo deste trabalho. Por ora, passamos à verificação da qualidade dos dados, em que abordaremos a presença de valores que extrapolam os valores limítrofes dos nossos dados, bem como a limpeza de dados através da remoção de valores nulos, inválidos ou numéricos negativos.
+
+\subsection{Verificação de qualidade dos dados}
+Uma vez que o nosso problema central de pesquisa gira em torno de valores numéricos, é preciso garantir que não existam valores nulos ou negativos em meio ao \textit{dataset}. Além disso, como indicado anteriormente, é preciso garantir que as datas dos gastos listados no \textit{dataset} estejam dentro do período esperado, de 2018 a 2022. A remoção de valores nulos, inválidos e negativos foi operada com o suporte do seguinte método:
+
+\begin{lstlisting}[style=vscode]
+def limpeza_dados(df):
+    print("\nDados antes da limpeza:")
+    print(df.info())
+
+    # Identifica colunas com pelo menos um valor ausente
+    colunas_com_na = df.columns[df.isnull().any()].tolist()
+
+    # Remove linhas com valores ausentes
+    gastos_limpos = df.dropna(subset=colunas_com_na)
+
+    # Remove linhas com valores negativos em todas as colunas numéricas
+    cols_numericas = gastos_limpos.select_dtypes(include='number').columns
+    for col in cols_numericas:
+        gastos_limpos = gastos_limpos[gastos_limpos[col] >= 0]
+
+    # Remove linhas com ano fora do intervalo 2018-2022
+    if 'Data' in gastos_limpos.columns:
+        datas = pd.to_datetime(gastos_limpos['Data'], format="%d/%m/%Y %H:%M", errors='coerce')
+        anos_validos = (datas.dt.year >= 2018) & (datas.dt.year <= 2022)
+        gastos_limpos = gastos_limpos[anos_validos]
+
+    print("\nDados após limpeza:")
+    print(gastos_limpos.info())
+
+    # Quantidade de linhas removidas
+    linhas_removidas = len(df) - len(gastos_limpos)
+    print(f"\nQuantidade de linhas removidas: {linhas_removidas}")
+
+    return gastos_limpos
+\end{lstlisting}
+
+Após a remoção dos valores nulos, inválidos e negativos, resolvemos novamente aplicar sobre o \textit{DataFrame} \texttt{gastos} a função \texttt{scatterplot\_gastos}, apresentada na seção anterior. O gráfico de dispersão resultante pode ser visto abaixo:
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=1\textwidth]{images/gastos_limpos_ano.png}
+    \label{fig:gastos_limpos_ano}
+\end{figure}
+
+Quanto às informações impressas localmente no terminal, você pode vê-las abaixo:
+
+\begin{minted}[bgcolor=black, fontsize=\footnotesize, breaklines]{text}
+Dados antes da limpeza:
+<class 'pandas.core.frame.DataFrame'>    
+RangeIndex: 807851 entries, 0 to 807850  
+Data columns (total 6 columns):
+ #   Column      Non-Null Count   Dtype  
+---  ------      --------------   -----  
+ 0   ID          807851 non-null  int64  
+ 1   Nome        807851 non-null  object 
+ 2   Descrição   807851 non-null  object 
+ 3   Fornecedor  807818 non-null  object
+ 4   Data        801736 non-null  object
+ 5   Valor (R$)  807851 non-null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 37.0+ MB
+None
+
+Dados após limpeza:
+<class 'pandas.core.frame.DataFrame'>
+Index: 797387 entries, 0 to 807850
+Data columns (total 6 columns):
+ #   Column      Non-Null Count   Dtype
+---  ------      --------------   -----
+ 0   ID          797387 non-null  int64
+ 1   Nome        797387 non-null  object
+ 2   Descrição   797387 non-null  object
+ 3   Fornecedor  797387 non-null  object
+ 4   Data        797387 non-null  object
+ 5   Valor (R$)  797387 non-null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 42.6+ MB
+None
+
+Quantidade de linhas removidas: 10464
+\end{minted}
+
+O resultado demonstra o sucesso da operação de limpeza dos dados. Já não há valores nulos ou negativos, que não fariam qualquer sentido em nossa investigação. Além disso, contamos apenas com gastos corretamente cadastrados com datas compreendidas no intervalo esperado.
+
+A título de curiosidade, nota-se pela variação existente no eixo das ordenadas, bem como nos pontos dispersos na parte superior do plano cartesiano, que há \textit{outliers} em meio ao nosso conjunto de dados. Como estamos observando o total gasto em cada ano na série estudada, não há sentido em removê-los da nossa análise. Seus gastos, ainda que exorbitantes, são relevantes para a nossa investigação. Porém, vale a pena observá-los do ponto de vista estatístico.
+
+Tendo em vista o uso de \textit{boxplots} para visualizar a presença de \textit{outliers}, entre outras métricas estatísticas relevantes, resolvemos codificar uma operação para produzir esse tipo de gráfico sobre o nosso \textit{DataFrame} \texttt{gastos} "limpo" \textemdash \ isto é, sem valores nulos, inválidos ou negativos na coluna \texttt{Valor (R\$)}. Essa operação pode ser vista abaixo:
+
+\begin{lstlisting}[style=vscode]
+def boxplot_gastos(df_gastos):
+    # O eixo X do boxplot deve ser categórico
+    if 'Ano' not in df_gastos.columns:
+        df_gastos['Ano'] = pd.to_datetime(df_gastos['Data'], format="%d/%m/%Y %H:%M", errors='coerce').dt.year
+    df_gastos['Ano'] = df_gastos['Ano'].astype('Int64')
+
+    plt.figure(figsize=(12, 6))
+    sns.boxplot(data=df_gastos, x="Ano", y="Valor (R$)")
+    plt.title("Boxplot dos gastos por ano")
+    plt.xlabel("Ano")
+    plt.ylabel("Valor (R$)")
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.show()
+\end{lstlisting}
+
+O \textit{boxplot} resultante da operação pode ser visto a seguir:
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=1\textwidth]{images/boxplot_gastos_limpos_ano.png}
+    \label{fig:boxplot_gastos_limpos_ano}
+\end{figure}
+
+Podemos ver que, a cada ano sobre os quais coletamos informações no portal de dados abertos da Câmara dos Deputados, de fato há muitos \textit{outliers}. Eles são tão impactantes que outros dados exibidos pelo \textit{boxplot}, como a mediana, os quartis, o mínimo e o máximo para cada ano observado sequer são visíveis. Mais um motivo para mantê-los em nosso \textit{DataFrame}. E mais um motivo para nos preocuparmos com os gastos dos nossos representantes.
+
+No próximo capítulo desta pesquisa, utilizaremos o \textit{PowerBI} para construir \textit{dashboards} a partir das informações coletadas, tratadas e organizadas ao longo da investigação até o momento. Assim, esperamos complexificar a visão preliminar obtida durante a segunda etapa do trabalho, visualizando a distribuição dos gastos parlamentares a cada ano a partir de diferentes recortes, como organização partidária, região do Brasil e parlamentares individualmente.
+
+\newpage
+\section{Preparação dos Dados}
+Nesta última parte da nossa pesquisa, importamos as nossas planilhas geradas anteriormente para um novo projeto no \textit{Power BI}, com o objetivo de produzir \textit{dashboards} que nos auxiliem a resolver a principal interrogação que levantamos neste trabalho. Durante esse processo, os dados foram transformados a fim de que os ruídos identificados e mencionados na seção anterior fossem removidos dos nossos \textit{datasets}.
+
+No caso da planilha \texttt{gastos.xlsx}, removemos linhas em branco e filtramos duas colunas a fim de remover valores inválidos \textemdash \ a coluna \texttt{Valor (R\$)} foi filtrada para remover as linhas com números negativos, e a coluna \texttt{Data} foi filtrada a fim de remover linhas com valores nulos, bem como registros anteriores a 2018 e posteriores a 2022. No caso da planilha \texttt{deputados.xlsx}, removemos linhas em branco e linhas com valores duplicados. No entanto, essas funções foram aplicadas sobre o arquivo sem que tivessem um efeito real, já que esta planilha em específico não sofria com ruídos de qualquer natureza.
+
+\subsection{Principais visualizações}
+A principal motivação da nossa investigação é descobrir se de fato gasta-se mais durante o período das eleições gerais do que ao longo dos quatro anos de atuação da legislatura eleita. Trata-se de uma visão fortemente presente em meio ao senso comum. Vejamos, então, os dois primeiros gráficos que geramos a partir dos nossos \textit{datasets}:
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=1\textwidth]{images/ano_quarter.pdf}
+    \caption{Total gasto por ano e por quarter}
+    \label{fig:gastos_ano_quarter}
+\end{figure}
+
+Os gráficos acima, gerados por meio do \textit{PowerBI}, demonstram uma inversão daquilo que supunhamos representar a realidade da política brasileira, estimulados pelo senso comum. Acredita-se, com base em uma desconfiança em relação à classe política brasileira, que nossos representantes em Brasília gastam dinheiro em demasia, e que ainda o fazem mal. Ainda, acredita-se que essa "gastança" é ainda pior durante as eleições gerais, quando muitos deputados federais arriscam a chance de se reeleger. Porém, o que os nossos dados demonstram é justamente o oposto.
+
+Nos histogramas representados pelo \texttt{Dashboard 1}, percebe-se que, dos cinco anos selecionados para a nossa investigação, não são necessariamente os anos eleitorais que se sobressaem em relação ao valor total gasto no período. O ano de 2022, quando foram eleitos os 513 deputados e deputadas da atual legislatura, é o mais imponente do intervalo temporal em termos de gastos, mas o ano de 2018 \textemdash \ quando ocorreu o penúltimo pleito \textemdash \ é superado por 2021 no que se refere ao total gasto pelos parlamentares. Neste mesmo \textit{dashboard}, ainda podemos observar um resultado segmentado por quarter, com destaques (pontos vermelhos) para os meses de outubro de cada um dos anos selecionados. O mês de outubro é justamente quando ocorrem o primeiro e o segundo turnos (quando necessário) das eleições presidenciais, sendo a Câmara dos Deputados definida na primeira volta do pleito.
+
+Em nenhum dos casos o mês de outubro representa o ápice no montante gasto pelos parlamentares. Podemos visualizar que, no contexto dos dois anos eleitorais, há períodos em que se gasta mais do que durante o principal mês das eleições. Além disso, ao compararmos o mês de outubro dos anos eleitorais com este mesmo mês em anos não eleitorais, podemos ver que o total gasto em ao menos um ano eleitoral é menor em comparação a anos não eleitoriais \textemdash \ contrapondo o ano de 2018 com todos os outros anos do período selecionado, por exemplo, a exceção de 2022.
+
+\subsection{Outras visualizações}
+Com tantos dados coletados, resolvemos ir além do escopo original da pesquisa e, também, verificar algumas informações extras que possam contribuir para uma apreciação qualitativa do fato descoberto \textemdash \ que os nossos parlamentares não gastam mais em períodos eleitorais. Uma das visualizações criadas é, justamente, o valor total gasto por cada partido da Câmara dos Deputados, filtrado por ano. Vejamos, então, os gráficos construídos com este propósito, também utilizando o \textit{PowerBI}:
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{images/ano_partido.pdf}
+    \caption{Total gasto por ano por partido}
+    \label{fig:gastos_ano_quarter}
+\end{figure}
+
+As mudanças de posição dos partidos listados neste \textit{ranking} representam as diferentes correlações de forças que compuseram a Câmara dos Deputados nos anos selecionados. Em meio aos gastos registrados no ano de 2018, por exemplo, o Partido dos Trabalhadores (PT) surge como o campeão de despesas totais na Casa, seguido pelo Progressistas (PP) e pelo Movimento Democrático Brasileiro (MDB). No ano seguinte, a sigla que desponta na liderança dos gastos é o Partido Liberal (PL). Esse fenômeno, inclusive, nos levou a perceber que, nos arquivos originais, as despesas foram registradas com as siglas dos partidos mais atuais dos deputados, não com as siglas dos partidos a que pertenciam à época em que os gastos foram realizados. Afinal, sabemos que o ex-presidente Jair Bolsonaro foi eleito pelo Partido Social Liberal (PSL), não pelo PL, no qual ingressou apenas em 2021. Nas eleições de 2018, muitos novos parlamentares foram eleitos pelo PSL em função da campanha de Bolsonaro, mas não vemos esse partido em meio ao \textit{ranking}. Devido à quantidade de dados trabalhados, no entanto, seria impraticável corrigir um problema dessa magnitude.
+
+A última visualização criada apresenta um \textit{top 10} dos parlamentares com maior gasto total no período observado. A soma das despesas considera os gastos de todos os anos em questão. A razão pela qual produzimos este gráfico é justamente observar o custo que muitos dos nossos parlamentares representam em sua atuação na Câmara dos Deputados.
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{images/gastos_deputado.png}
+    \caption{Os 10 deputados com maior gasto total no período}
+    \label{fig:gastos_ano_quarter}
+\end{figure}
+
+Esta e todas as outras visualizações podem ser melhor observadas no nosso \textit{dashboard}, disponível para \textit{download} \href{https://drive.google.com/file/d/1WyikcgA5HRKego61Uho4Kbsj4GufMJ8i/view?usp=sharing}{neste link}. Criamos filtros relativos a cada um dos anos selecionados, de modo que os \textit{dashboards} interativos possam auxiliar interessados no assunto a tirar suas próprias conclusões a partir das informações que coletamos ao longo desta investigação.
+ 
+\newpage
+\section{Referências}
+
+\begingroup
+\renewcommand{\refname}{}
+\begin{thebibliography}{9}
+\vspace{-3em}
+
+\bibitem{camara-gastos}
+CÂMARA DOS DEPUTADOS. \textit{Gastos dos deputados federais}. Agência Câmara de Notícias, [s.d.]. Disponível em: \url{https://www.camara.leg.br/transparencia/gastos-parlamentares/}. Acesso em: 9 set. 2025.
+
+\bibitem{camara-deputado}
+CÂMARA DOS DEPUTADOS. \textit{Saiba quais são as atribuições do deputado federal}. Agência Câmara de Notícias, 22 ago. 2022. Disponível em: \url{https://www.camara.leg.br/noticias/903471-SAIBA-QUAIS-SAO-AS-ATRIBUICOES-DO-DEPUTADO-FEDERAL/}. Acesso em: 9 set. 2025.
+
+\bibitem{tre-partidos}
+TRIBUNAL REGIONAL ELEITORAL DO PIAUÍ (TRE-PI). \textit{Dos Partidos Políticos}. [s.d.]. Disponível em: \url{https://www.tre-pi.jus.br/partidos/duvidas-frequentes/dos-partidos-politicos-e-das-coligacoes}. Acesso em: 9 set. 2025.
+
+\bibitem{xavier}
+XAVIER, Renan Melo. Em período eleitoral, Câmara gasta R\$ 18,7 milhões em cota parlamentar. \textit{Metrópoles}, Brasília, 23 set. 2018. Disponível em: \url{https://www.metropoles.com/brasil/politica-brasil/em-periodo-eleitoral-camara-gasta-r-187-milhoes-em-cota-parlamentar}. Acesso em: 30 out. 2025.
+
+\end{thebibliography}
+\endgroup
+
+\end{document}

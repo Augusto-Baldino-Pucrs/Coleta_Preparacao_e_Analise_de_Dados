@@ -1,0 +1,38 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+Dimensões do DataFrame \PYGZsq{}deputados\PYGZsq{}: (613, 5)
+
+Dimensões do DataFrame \PYGZsq{}gastos\PYGZsq{}: (807851, 6)
+
+Nomes das colunas do DataFrame \PYGZsq{}deputados\PYGZsq{}: [\PYGZsq{}ID\PYGZsq{}, \PYGZsq{}Nome\PYGZsq{}, \PYGZsq{}Partido\PYGZsq{}, \PYGZsq{}Estado\PYGZsq{}, \PYGZsq{}Legislatura\PYGZsq{}]
+
+Nomes das colunas do DataFrame \PYGZsq{}gastos\PYGZsq{}: [\PYGZsq{}ID\PYGZsq{}, \PYGZsq{}Nome\PYGZsq{}, \PYGZsq{}Descrição\PYGZsq{}, \PYGZsq{}Fornecedor\PYGZsq{}, \PYGZsq{}Data\PYGZsq{}, \PYGZsq{}Valor (R\PYGZdl{})\PYGZsq{}]
+
+Informações gerais do DataFrame \PYGZsq{}deputados\PYGZsq{}:
+\PYGZlt{}class \PYGZsq{}pandas.core.frame.DataFrame\PYGZsq{}\PYGZgt{}
+RangeIndex: 613 entries, 0 to 612
+Data columns (total 5 columns):
+ \PYGZsh{}   Column       Non\PYGZhy{}Null Count  Dtype
+\PYGZhy{}\PYGZhy{}\PYGZhy{}  \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}       \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}  \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}
+ 0   ID           613 non\PYGZhy{}null    int64
+ 1   Nome         613 non\PYGZhy{}null    object
+ 2   Partido      613 non\PYGZhy{}null    object
+ 3   Estado       613 non\PYGZhy{}null    object
+ 4   Legislatura  613 non\PYGZhy{}null    int64
+dtypes: int64(2), object(3)
+memory usage: 24.1+ KB
+
+Informações gerais do DataFrame \PYGZsq{}gastos\PYGZsq{}:
+\PYGZlt{}class \PYGZsq{}pandas.core.frame.DataFrame\PYGZsq{}\PYGZgt{}
+RangeIndex: 807851 entries, 0 to 807850
+Data columns (total 6 columns):
+ \PYGZsh{}   Column      Non\PYGZhy{}Null Count   Dtype
+\PYGZhy{}\PYGZhy{}\PYGZhy{}  \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}      \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}   \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}
+ 0   ID          807851 non\PYGZhy{}null  int64
+ 1   Nome        807851 non\PYGZhy{}null  object
+ 2   Descrição   807851 non\PYGZhy{}null  object
+ 3   Fornecedor  807818 non\PYGZhy{}null  object
+ 4   Data        801736 non\PYGZhy{}null  object
+ 5   Valor (R\PYGZdl{})  807851 non\PYGZhy{}null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 37.0+ MB
+\end{MintedVerbatim}

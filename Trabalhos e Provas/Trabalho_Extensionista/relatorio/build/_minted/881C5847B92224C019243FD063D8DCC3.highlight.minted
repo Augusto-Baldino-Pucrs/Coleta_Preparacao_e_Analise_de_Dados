@@ -1,0 +1,35 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+Dados antes da limpeza:
+\PYGZlt{}class \PYGZsq{}pandas.core.frame.DataFrame\PYGZsq{}\PYGZgt{}
+RangeIndex: 807851 entries, 0 to 807850
+Data columns (total 6 columns):
+ \PYGZsh{}   Column      Non\PYGZhy{}Null Count   Dtype
+\PYGZhy{}\PYGZhy{}\PYGZhy{}  \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}      \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}   \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}
+ 0   ID          807851 non\PYGZhy{}null  int64
+ 1   Nome        807851 non\PYGZhy{}null  object
+ 2   Descrição   807851 non\PYGZhy{}null  object
+ 3   Fornecedor  807818 non\PYGZhy{}null  object
+ 4   Data        801736 non\PYGZhy{}null  object
+ 5   Valor (R\PYGZdl{})  807851 non\PYGZhy{}null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 37.0+ MB
+None
+
+Dados após limpeza:
+\PYGZlt{}class \PYGZsq{}pandas.core.frame.DataFrame\PYGZsq{}\PYGZgt{}
+Index: 797387 entries, 0 to 807850
+Data columns (total 6 columns):
+ \PYGZsh{}   Column      Non\PYGZhy{}Null Count   Dtype
+\PYGZhy{}\PYGZhy{}\PYGZhy{}  \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}      \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}   \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}
+ 0   ID          797387 non\PYGZhy{}null  int64
+ 1   Nome        797387 non\PYGZhy{}null  object
+ 2   Descrição   797387 non\PYGZhy{}null  object
+ 3   Fornecedor  797387 non\PYGZhy{}null  object
+ 4   Data        797387 non\PYGZhy{}null  object
+ 5   Valor (R\PYGZdl{})  797387 non\PYGZhy{}null  float64
+dtypes: float64(1), int64(1), object(4)
+memory usage: 42.6+ MB
+None
+
+Quantidade de linhas removidas: 10464
+\end{MintedVerbatim}
